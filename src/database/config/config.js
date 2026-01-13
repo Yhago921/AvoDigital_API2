@@ -1,6 +1,6 @@
 const path = require("path");
 
-require("dotenv").config({ path: path.resolve("../../../.env") });
+require("dotenv").config({ path: path.resolve("../../.env") });
 
 console.log(process.env.DATABASE_DIALECT);
 
