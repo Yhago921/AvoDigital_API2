@@ -1,10 +1,7 @@
 const express = require("express");
 const cors = require("cors");
-const adminRoutes = require("./src/modules/admin/admin.routes");
-const personRoute = require("./src/modules/pessoa/pessoa.routes");
-const userRoute = require("./src/modules/usuario/usuario.routes");
 const login = require("./src/auth/login");
-
+const rotaUsuario = require("./src/modules/usuario/usuario.routes");
 const app = express();
 const porta = process.env.PORT || 4002;
 
@@ -12,11 +9,9 @@ app.use(express.json());
 
 app.use(cors());
 
-app.post("/login", login);
+app.post("/auth/login", login);
 
-app.use("/admin", adminRoutes);
-app.use("/pessoas", personRoute);
-app.use("/usuarios", userRoute);
+app.use("/usuarios", rotaUsuario);
 
 app.listen(porta, (err) => {
   if (err) {

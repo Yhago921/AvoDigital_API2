@@ -9,12 +9,28 @@ module.exports = {
         primaryKey: true,
         defaultValue: Sequelize.UUIDV4,
       },
-      senha: {
+      nome: {
         type: Sequelize.STRING,
         allowNull: false,
       },
-      pessoaId: {
-        type: Sequelize.UUID,
+      ultimoNome: {
+        type: Sequelize.STRING,
+        allowNull: false,
+      },
+      email: {
+        type: Sequelize.STRING,
+        allowNull: false,
+        unique: true,
+      },
+   
+      tipo: {
+        type: Sequelize.ENUM("estudante", "admin"),
+        defaultValue: "estudante",
+        allowNull: false,
+      },
+      activo: {
+        type: Sequelize.BOOLEAN,
+        defaultValue: true,
         allowNull: false,
       },
       createdAt: {
@@ -23,15 +39,14 @@ module.exports = {
       updatedAt: {
         type: Sequelize.DATE,
       },
+      senha: {
+        type: Sequelize.STRING,
+        allowNull: false,
+      },
     });
   },
 
   async down(queryInterface, Sequelize) {
-    /**
-     * Add reverting commands here.
-     *
-     * Example:
-     * await queryInterface.dropTable('users');
-     */
+    await queryInterface.dropTable("usuarios");
   },
 };

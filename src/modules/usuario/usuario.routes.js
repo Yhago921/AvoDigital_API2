@@ -1,7 +1,8 @@
 const express = require("express");
-const cadastrarUsuario = require("./usuario.controller");
-const userRoute = express.Router();
+const rotaUsuario = express.Router();
 
-userRoute.post("/cadastrarUsuario", cadastrarUsuario);
+rotaUsuario.post("/cadastrarUsuario", )
 
-module.exports = userRoute;
+
+
+module.exports = rotaUsuario;

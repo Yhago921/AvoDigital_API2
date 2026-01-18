@@ -1,15 +1,32 @@
 const { DataTypes } = require("sequelize");
-const Sequelize = require("../../database");
-const Pessoa = require("../pessoa/pessoa.model");
+const sequelize = require("../../database");
 
-const usuario = Sequelize.define("usuarios", {
-  Id: {
+const Usuario = sequelize.define("usuarios", {
+  id: {
     type: DataTypes.UUID,
     primaryKey: true,
     defaultValue: DataTypes.UUIDV4,
   },
-  pessoaId: {
-    type: DataTypes.UUID,
+  nome: {
+    type: DataTypes.STRING,
+    allowNull: false,
+  },
+  ultimoNome: {
+    type: DataTypes.STRING,
+    allowNull: false,
+  },
+  genero: {
+    type: DataTypes.ENUM("Masculino", "Feminino"),
+    allowNull: false,
+  },
+  email: {
+    type: DataTypes.STRING,
+    allowNull: false,
+    unique: true,
+  },
+  tipo: {
+    type: DataTypes.ENUM("estudante", "admin"),
+    defaultValue: "estudante",
     allowNull: false,
   },
   senha: {
@@ -18,12 +35,4 @@ const usuario = Sequelize.define("usuarios", {
   },
 });
 
-usuario.belongsTo(Pessoa, {
-  foreignKey: "pessoaId",
-});
-
-Pessoa.hasOne(usuario, {
-  foreignKey: "pessoaId",
-});
-
-module.exports = usuario;
+module.exports = Usuario;
