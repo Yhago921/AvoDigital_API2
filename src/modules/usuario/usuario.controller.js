@@ -1,5 +1,8 @@
+const { where, Model } = require("sequelize");
 const Usuario = require("./usuario.model");
 const bcrypt = require("bcrypt");
+const admin = require("../admin/admin.model");
+
 const cadastrarUsuario = async (req, res) => {
   try {
     const { nome, ultimoNome, email, dataNascimento, senha } = req.body;
@@ -30,4 +33,23 @@ const cadastrarUsuario = async (req, res) => {
   }
 };
 
-module.exports = cadastrarUsuario;
+const perfilUsuario = async (req, res) => {
+  try {
+    const tipo = req.usuario.tipo;
+    const id = req.usuario.id;
+
+    const includeModel = tipo === "admin" ? admin : estudante;
+
+    const encontrarUsuario = await Usuario.findOne({
+      where: { id: id },
+      include: [{ model: includeModel }],
+      attributes: { exclude: ["senha"] },
+    });
+
+    return res.status(200).json({ encontrarUsuario: encontrarUsuario });
+  } catch (erro) {
+    return res.status(500).json({ retorno: erro });
+  }
+};
+
+module.exports = { cadastrarUsuario, perfilUsuario };

@@ -1,12 +1,10 @@
-const Pessoa = require("../modules/pessoa/pessoa.model");
-const Usuario = require("../modules/usuario/usuario.model");
 const jwt = require("jsonwebtoken");
 const bcrypt = require("bcrypt");
-
+const Usuario = require("../modules/usuario/usuario.model");
+const admin = require("../modules/admin/admin.model");
 
 const SECRET_TOKEN =
   "sjkdbLIUNERHO8WNTHOVF6W8M8EE8766667w&&&//useyromxeyrngbcoemnt";
-
 
 const login = async (req, res) => {
   try {
@@ -18,34 +16,43 @@ const login = async (req, res) => {
         .json({ retorno: "Todos os campos são obrigatórios" });
     }
 
-    const pessoa = await Pessoa.findOne({
+    const encontrarUsuario = await Usuario.findOne({
       where: { email },
-      include: {
-        model: Usuario,
-      },
     });
 
-    if (!pessoa || !pessoa.usuario) {
-      return res.status(400).json({ retorno: "Email ou senha incorreta" });
+    if (!encontrarUsuario) {
+      return res.status(404).json({ retorno: "Usuário não encontrado" });
     }
 
-    const senhaValida = await bcrypt.compare(senha, pessoa.usuario.senha);
+    /* const e_Usuario_ou_Admin =
+      encontrarUsuario.tipo === "admin"
+        ? await Usuario.findOne({
+            where: { email },
+            include: { model: admin },
+          })
+        : await Usuario.findOne({
+            where: { email },
+            include: { model: estudante },
+          });
+*/
+    const senhaValida = await bcrypt.compare(senha, encontrarUsuario.senha);
 
     if (!senhaValida) {
-      return res.status(400).json({ retorno: "Email ou senha incorreta" });
+      return res.status(400).json({ retorno: "Email ou Senha Incorreta" });
     }
 
-    const token = jwt.sign({ id: pessoa.id }, SECRET_TOKEN, {
-      expiresIn: "1d",
-    });
+    const token = jwt.sign(
+      { id: encontrarUsuario.id, tipo: encontrarUsuario.tipo },
+      SECRET_TOKEN,
+      {
+        expiresIn: "1h",
+      },
+    );
 
     return res.status(200).json({
+      tipo: encontrarUsuario.tipo,
       token,
-      usuario: {
-        id: pessoa.id,
-        nome: pessoa.nome,
-        email: pessoa.email,
-      },
+      retorno: "Login feito com sucesso",
     });
   } catch (erro) {
     console.error(erro);

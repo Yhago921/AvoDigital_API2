@@ -22,11 +22,9 @@ module.exports = {
         allowNull: false,
         unique: true,
       },
-   
       tipo: {
         type: Sequelize.ENUM("estudante", "admin"),
         defaultValue: "estudante",
-        allowNull: false,
       },
       activo: {
         type: Sequelize.BOOLEAN,
