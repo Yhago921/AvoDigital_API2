@@ -14,7 +14,7 @@ rotaLingua.post("/cadastrarLingua", verificarToken, eAdmin, cadastrarLingua);
 
 rotaLingua.post("/deletarLingua/:id", verificarToken, eAdmin, deletarLingua);
 
-rotaLingua.get("/exibirtodasLinguas", verificarToken, exibirLinguasCadastradas);
+rotaLingua.get("/exibirtodasLinguas", exibirLinguasCadastradas);
 
 rotaLingua.post(
   "/actualizarLingua/:id",
